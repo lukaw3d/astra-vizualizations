@@ -1,0 +1,149 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <title>Največji skupni delitelj</title>
+    <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <link href="angular-astra.css" rel="stylesheet">
+  </head>
+  <body ng-controller="Ctrl">
+
+
+    <br>
+    <div class="container">
+      <div class="alert alert-danger" ng-show="error">
+        Oops, izgleda da se je v algoritmu pojavila napaka pri izračunu GCD ali LCM!
+      </div>
+
+      <h4>Razdeli na prafaktorje</h4>
+
+      <table class="tight">
+        <tr ng-repeat="num in nums">
+          <td>
+            <form name="form" ng-submit="nums.push({n: 2});">
+              <input type="number" placeholder="Vpiši število" min="2" max="500000" class="form-control" required
+                ng-model="num.n" name="num" ng-focus="num.focus = true;" ng-blur="num.focus = false;">
+
+            </form>
+          </td>
+          <td> = </td>
+          <td>
+            <span ng-hide="form.num.$valid" class="text-danger">Število naj bo med 2 in 500000</span>
+            <span ng-repeat="f in num.factors track by $index">
+              <span>{{f.factor}}</span>
+              <span ng-hide="$last"> &times; </span>
+            </span>
+          </td>
+
+          <td> &nbsp; = </td>
+          <td>
+            <span ng-repeat="(f, e) in num.expFactors">
+              <b>{{f}}<sup>{{e.exp}}</sup></b>
+              <span ng-hide="$last"> &times; </span>
+            </span>
+          </td>
+        </tr>
+      </table>
+      <button class="btn btn-default input-width" ng-click="nums.push({n: 2});">Dodaj število</button>
+      
+      <hr>
+
+      <h4>Največji skupni delitelj</h4>
+      <div class="indent">
+        <ul class="list-inline tight my-inline">
+          <li><b> GCD ({{ _.map(nums, 'n').join(',') }}) </b></li>
+          <li> = </li>
+          <li ng-repeat="f in gcdFactors track by $index">
+            <span class="label label-info">{{f}}</span>
+            <span ng-hide="$last"> &times; </span>
+          </li>
+          <li> = </li>
+          <li ng-repeat="(f, exp) in gcdExpFactors">
+            <b class="label label-success large">{{f}}<sup>{{exp}}</sup></b>
+            <span ng-hide="$last"> &times; </span>
+          </li>
+          <li> = </li>
+          <li>{{gcd}}</li>
+        </ul>
+        <br><br>
+
+        <table class="tight">
+          <tr ng-repeat="num in nums">
+            <td> {{num.n}} </td>
+            <td> = </td>
+            <td>
+              <span ng-repeat="f in num.factors track by $index">
+                <span ng-class="{'label label-info': f.gcd}">{{f.factor}}</span>
+                <span ng-hide="$last"> &times; </span>
+              </span>
+            </td>
+
+            <td> &nbsp; = </td>
+            <td>
+              <span ng-repeat="(f, e) in num.expFactors">
+                <b ng-class="{'label label-success large': e.gcd}">{{f}}<sup>{{e.exp}}</sup></b>
+                <span ng-hide="$last"> &times; </span>
+              </span>
+            </td>
+          </tr>
+        </table>
+        <br>
+
+        <p>V faktorski obliki: "presek" faktorjev v vseh vrsticah</p>
+        <p>V eksponentni obliki: za vsak faktor ki se pojavi v vseh vrsticah hkrati, vzamemo tistega z najmanjšim eksponentom</p>
+      </div>
+
+      <hr>
+
+      <h4>Najmanjši skupni večkratnik</h4>
+      <div class="indent">
+        <ul class="list-inline tight my-inline">
+          <li><b> LCM ({{ _.map(nums, 'n').join(',') }}) </b></li>
+          <li> = </li>
+          <li ng-repeat="f in lcmFactors track by $index">
+            <span class="label label-info">{{f}}</span>
+            <span ng-hide="$last"> &times; </span>
+          </li>
+          <li> = </li>
+          <li ng-repeat="(f, exp) in lcmExpFactors">
+            <b class="label label-success large">{{f}}<sup>{{exp}}</sup></b>
+            <span ng-hide="$last"> &times; </span>
+          </li>
+          <li> = </li>
+          <li>{{lcm}}</li>
+        </ul>
+        <br><br>
+
+        <table class="tight">
+          <tr ng-repeat="num in nums">
+            <td> {{num.n}} </td>
+            <td> = </td>
+            <td>
+              <span ng-repeat="f in num.factors track by $index">
+                <span ng-class="{'label label-info': f.lcm}">{{f.factor}}</span>
+                <span ng-hide="$last"> &times; </span>
+              </span>
+            </td>
+
+            <td> &nbsp; = </td>
+            <td>
+              <span ng-repeat="(f, e) in num.expFactors">
+                <b ng-class="{'label label-success large': e.lcm}">{{f}}<sup>{{e.exp}}</sup></b>
+                <span ng-hide="$last"> &times; </span>
+              </span>
+            </td>
+          </tr>
+        </table>
+        <br>
+
+        <p>V faktorski obliki: "unija" faktorjev v vseh vrsticah</p>
+        <p>V eksponentni obliki: za vsak faktor ki se pojavi v katerikoli vrstici, vzamemo tistega z največjim eksponentom</p>
+      </div>
+    </div>
+
+
+    <script src="angular-gcd.js"></script>
+  </body>
+</html>
