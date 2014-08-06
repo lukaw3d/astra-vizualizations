@@ -1,0 +1,176 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <title>Praštevilski razcep</title>
+    <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <link href="angular-astra.css" rel="stylesheet">
+  </head>
+  <body ng-controller="Ctrl">
+
+
+    <br>
+    <div class="container">
+      <form name="form">
+        <h4>Razdeli na prafaktorje</h4>
+
+        <ul class="list-inline tight">
+          <li>
+            <input type="number" placeholder="Vpiši število" min="2" max="500000" class="form-control" required
+              ng-model="num" name="num">
+          </li>
+          <li ng-hide="hideSolutions"> = </li>
+          <li ng-hide="hideSolutions" ng-repeat="f in factoring track by $index">
+            <span class="label label-info">{{f.factor}}</span>
+            <span ng-hide="$last"> &times; </span>
+          </li>
+
+          <li ng-hide="hideSolutions"> = </li>
+          <li ng-hide="hideSolutions" ng-repeat="(f, e) in exponentFactors">
+            <b>
+              {{f}}<sup>{{e}}</sup>
+            </b>
+            <span ng-hide="$last"> &times; </span>
+          </li>
+        </ul>
+        <span ng-hide="form.num.$valid" class="text-danger">Število naj bo med 2 in 500000</span>
+      </form>
+
+
+      <br>
+      <h4>
+        Reši sam
+        <small>&nbsp; &nbsp; Prikaži <input type="checkbox" ng-model="hideSolutions"></input></small>
+      </h4>
+      <div ng-show="hideSolutions">
+        <div class="indent">
+          <b>Praštevila: &nbsp;</b>
+          <ul class="list-inline my-inline" calc="{{maxFactor = _.indexOf(primes, _.max(factoring, 'factor').factor)+5; }}">
+            <li ng-repeat="p in primes | limitTo:maxFactor">
+              {{p}}
+            </li>
+          </ul>
+
+          <br>
+          <div ng-repeat="f in tries" calc="{{ fraction = getFraction(f.prevN / f.factor); isPrime = primes.indexOf(f.factor) >= 0;}}">
+            {{f.prevN}}
+            &div;
+            <span ng-class="{'label label-info': !fraction}">{{f.factor}}</span>
+            =
+            {{ Math.floor(f.prevN / f.factor) }}<span class="text-danger" ng-if="fraction">,{{ fraction }}</span>
+
+            &nbsp; &nbsp; &nbsp;
+            <span class="text-muted">
+              <span ng-if="isPrime">Število {{f.prevN}} poskusimo deliti s praštevilom {{f.factor}}.</span>
+              <span ng-if="isPrime && fraction" class="text-danger">Ugotovimo, da {{f.factor}} ne deli {{f.prevN}}.</span>
+              <span ng-if="isPrime && !fraction" class="text-info">Ugotovimo, da je {{f.factor}} delitelj {{f.prevN}}.</span>
+
+              <span ng-if="!isPrime">Število {{f.prevN}} ponesreči delimo s sestavljenim številom {{f.factor}}.</span>
+            </span>
+          </div>
+          <br>
+          <div calc="{{ f = _.last(tries) || {remaining: num}; }}" ng-hide="f.remaining == 1">
+            <form ng-submit="doTry(tryN, f);">
+              {{f.remaining}}
+              &div;
+              <label><input type="number" min="2" max="500000" required class="form-control input-sm" ng-model="tryN" name="tryN"></label>
+              =
+              <button type="submit" class="btn btn-default btn-sm">Poskusi</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <div ng-hide="hideSolutions">
+        <br>
+        <h4>Deljenje</h4>
+        <ul class="list-unstyled">
+          <li ng-repeat="f in factoring track by $index" calc="{{findex = $index;}}">
+            <span class="w">{{f.prevN}}</span>
+            &div;
+            <span class="w"><span class="label label-info">{{f.factor}}</span></span>
+            =
+            <span class="w"><span ng-class="{'label label-default': $last}">{{f.remaining}}</span></span>
+
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <ul class="list-inline hidden-xs">
+              <li ng-repeat="p in primes | limitTo:10">
+                <span class="wh">
+                  <span ng-class="primeClass(this)">
+                    {{p}}
+                  </span>
+                </span>
+              </li>
+              <li>
+                ...
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+
+      <div ng-hide="hideSolutions">
+        <br>
+        <h4>Postopek <small>&nbsp; &nbsp; Prikaži <input type="checkbox" ng-model="showProcess"></input></small></h4>
+        <div ng-if="showProcess" class="indent">
+          <b>Potrebna praštevila: &nbsp;</b>
+          <ul class="list-inline my-inline" calc="{{maxFactor = _.indexOf(primes, _.max(factoring, 'factor').factor)+1; }}">
+            <li ng-repeat="p in primes | limitTo:maxFactor">
+              {{p}}
+            </li>
+          </ul>
+          <br>
+          <div ng-repeat="f in factoring track by $index" calc="{{ cf = f.factor; pf = $index>0 ? factoring[$index-1].factor : 2; cfactors = primes.slice(primes.indexOf(pf), primes.indexOf(cf)+1); firstF = $first; }}">
+
+            <div ng-repeat="innerF in cfactors" calc="{{good = $last;}}" class="nowrap">
+              {{f.prevN}}
+              &div;
+              <span ng-class="{'label label-info': good}">{{innerF}}</span>
+              =
+              {{ Math.floor(f.prevN / innerF) }}<span class="text-danger" ng-if="getFraction(f.prevN / innerF)">,{{ getFraction(f.prevN / innerF) }}</span>
+
+              &nbsp; &nbsp; &nbsp;
+              <span class="text-muted">
+                <span ng-if="firstF">Število {{f.prevN}} poskusimo deliti s prvim praštevilom: {{innerF}}.</span>
+                <span ng-if="$first && !firstF">Število poskusimo ponovno deliti s praštevilom {{innerF}}.</span>
+                <span ng-if="!$first && !firstF">Število {{f.prevN}} poskusimo deliti z naslednjim praštevilom: {{innerF}}.</span>
+
+                <span ng-if="getFraction(f.prevN / innerF)" class="text-danger">Ugotovimo, da {{innerF}} ne deli {{f.prevN}}.</span>
+                <span ng-if="!getFraction(f.prevN / innerF)" class="text-info">Ugotovimo, da je {{innerF}} delitelj {{f.prevN}}.</span>
+              </span>
+            </div>
+
+            <br>
+          </div>
+        </div>
+      </div>
+
+
+      <div ng-hide="hideSolutions">
+        <br>
+        <h4>Drevo</h4>
+        <ul class="list-unstyled tree nowrap">
+          <li><span class="w">{{num}}</span></li>
+          <li ng-repeat="f in factoring track by $index" ng-style="{'margin-left': (38*$index)+ 'px'}">
+            <div class="text-center">
+              <i class="glyphicon glyphicon-chevron-up text-center"></i>
+              <br>
+
+              <span class="w"><span class="label label-info">{{f.factor}}</span></span>
+              <span class="invisible">&times;</span>
+              <span class="w"><span ng-class="{'label label-default': $last}">{{f.remaining}}</span></span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+
+    <script src="angular-prime-factors.js"></script>
+  </body>
+</html>

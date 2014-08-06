@@ -1,0 +1,51 @@
+.tight.list-inline li {
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.tight.list-inline li:first-child {
+  padding-left: 5px;
+}
+.tight input, .input-width{
+  width: 11em;
+}
+span.w {
+  display: inline-block;
+  width: 56px;
+  text-align: center;
+}
+span.wh {
+  display: inline-block;
+  width: 28px;
+  text-align: center;
+}
+.tree li{
+  margin-top: 7px;
+}
+.tree li:first-child{
+  margin-left: 33px;
+}
+.tree li div{
+  display: inline-block;
+}
+.my-inline {
+  display: inline-block;
+}
+ul ul.list-inline {
+  display: inline-block;
+}
+small input[type=checkbox] {
+  vertical-align: top;
+}
+.indent {
+  margin-left: 2em;
+}
+.label.large {
+  font-size: 85%;
+}
+table.tight td{
+  padding-right: 4px;
+  padding-bottom: 2px;
+}
+.nowrap {
+  white-space: nowrap;
+}
