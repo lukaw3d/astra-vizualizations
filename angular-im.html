@@ -1,0 +1,82 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <title>Ravnina kompleksnih števil</title>
+    <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <link href="angular-astra.css" rel="stylesheet">
+  </head>
+  <body ng-controller="Ctrl">
+
+
+    <br>
+    <div class="container">
+
+      <h2>Ravnina kompleksnih števil</h2>
+
+      <svg viewBox="-5 -6 14 12" height="400" width="500" id="imSvg"
+        ng-mousemove="position($event)" ng-click="logPos()" ng-style="{cursor: 'pointer'}">
+
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10" stroke="#000" fill="none" stroke-width="1.3"></path>
+          </marker>
+          <marker id="blueArrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10" stroke="#5bc0de" fill="none" stroke-width="1.3"></path>
+          </marker>
+        </defs>
+
+        <g stroke="#000" fill="none" stroke-width="0.05">
+          <path ng-attr-d="M {{-w}} 0 H {{w}}" marker-end="url(#arrow)"></path>
+          <path ng-attr-d="M 0 {{w}} V {{-w}}" marker-end="url(#arrow)"></path>
+
+          <path ng-repeat="h in _.range(-w+1, w)" ng-attr-d="M {{h}} {{-tw}} V {{tw}}"></path>
+          <path ng-repeat="v in _.range(-w+1, w)" ng-attr-d="M {{-tw}} {{v}} H {{tw}}"></path>
+        </g>
+
+        <g stroke="none" fill="#000" ng-attr-font-size="{{tx}}">
+          <text ng-repeat="h in _.range(-w+1, 0)" ng-attr-x="{{h-tx/1.5}}" ng-attr-y="{{tw+tx*1.2}}">{{h}}</text>
+          <text ng-repeat="h in _.range(1, w)" ng-attr-x="{{h-tx/3}}" ng-attr-y="{{tw+tx*1.2}}">{{h}}</text>
+          <text ng-attr-x="{{w-tx}}" ng-attr-y="{{tw+tx*1.2}}">&real;</text>
+
+          <text ng-repeat="v in _.range(-w+1, 0)" ng-attr-x="{{-tw-tx*1.6}}" ng-attr-y="{{-v+tx/3}}">
+            {{v}}<tspan font-style="italic">i</tspan>
+          </text>
+          <text ng-repeat="v in _.range(1, w)" ng-attr-x="{{-tw-tx*1.2}}" ng-attr-y="{{-v+tx/3}}">
+            {{v}}<tspan font-style="italic">i</tspan>
+          </text>
+          <text ng-attr-x="{{-tw-tx*1.1}}" ng-attr-y="{{-w+tx/1.5}}">&image;</text>
+        </g>
+
+        <g fill="#5bc0de" ng-attr-font-size="{{tx*1.5}}">
+          <path ng-attr-d="M 0 0 L {{dataPt.x}} {{-dataPt.y}}" stroke="#5bc0de" stroke-width="0.02"></path>
+          <path ng-attr-d="M {{dataPt.x*0.9999}} {{-dataPt.y*0.9999}} L {{dataPt.x}} {{-dataPt.y}}" stroke="#5bc0de" stroke-width="0.06" marker-end="url(#blueArrow)"></path>
+          
+
+          <circle ng-attr-cx="{{dataPt.x}}" ng-attr-cy="{{-dataPt.y}}" r="0.1"></circle>
+          <text ng-attr-x="{{dataPt.x}}" ng-attr-y="{{-dataPt.y-tx}}">
+            {{ptText(dataPt)}}<tspan font-style="italic">i</tspan>
+          </text>
+        </g>
+      </svg>
+
+
+      <div class="my-inline" ng-style="{'vertical-align': 'top'}">
+        <br><br>
+        <ul>
+          <li ng-repeat="pt in log" ng-style="{'margin-bottom': '4px'}">
+            <span class="label label-info large" ng-mouseenter="loadPos(pt);">
+              {{ptText(pt)}}<i>i</i>
+            </span>
+          </li>
+        </ul>
+      </div>
+      
+    </div>
+
+
+    <script src="angular-im.js"></script>
+  </body>
+</html>
