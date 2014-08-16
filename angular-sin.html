@@ -1,0 +1,111 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <title>Enotska krožnica</title>
+    <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <link href="angular-astra.css" rel="stylesheet">
+  </head>
+  <body ng-controller="Ctrl">
+
+
+    <br>
+    <div class="container">
+
+      <h2>Enotska krožnica</h2>
+
+      <svg viewBox="-1.85 -1.2 3.85 2.4" height="325" width="500" id="imSvg"
+        ng-mousemove="position($event)" ng-click="logPos()" ng-style="{cursor: 'pointer'}">
+
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10" stroke="#000" fill="none" stroke-width="1.3"></path>
+          </marker>
+        </defs>
+
+        <g stroke="#000" fill="none" stroke-width="0.01">
+          <path ng-attr-d="M {{-w}} 0 H {{w}}" marker-end="url(#arrow)"></path>
+          <path ng-attr-d="M 0 {{w}} V {{-w}}" marker-end="url(#arrow)"></path>
+
+          <path ng-repeat="h in _.range(-dw, dw+0.1, 0.25)" ng-attr-d="M {{h}} {{-tw}} V {{tw}}"></path>
+          <path ng-repeat="v in _.range(-dw, dw+0.1, 0.25)" ng-attr-d="M {{-tw}} {{v}} H {{tw}}"></path>
+
+          <circle cx="0" cy="0" ng-attr-r="{{dw}}"></circle>
+        </g>
+
+        <g stroke="none" fill="#000" ng-attr-font-size="{{tx}}">
+          <text text-anchor="end" ng-attr-x="{{-dw*1.02}}" ng-attr-y="{{tw+tx*1.2}}">&minus;1</text>
+          <text text-anchor="start" ng-attr-x="{{dw*1.02}}" ng-attr-y="{{tw+tx*1.2}}">1</text>
+
+          <text text-anchor="end" ng-attr-x="{{-tw-tx/2}}" ng-attr-y="{{dw*1.05+tx/2}}">&minus;1</text>
+          <text text-anchor="end" ng-attr-x="{{-tw-tx/2}}" ng-attr-y="{{-dw*1.05+tx/3}}">1</text>
+        </g>
+        <g ng-attr-stroke="{{!getExact(dataPt.a) ? '#5bc0de' : '#5cb85c'}}" stroke-width="0.004" fill="none">
+          <path ng-attr-d="M 0 0 L {{dataPt.x}} {{-dataPt.y}}"></path>
+
+          <path ng-attr-d="M {{dataPt.x}} 0 V {{-dataPt.y}}"></path>
+          <path ng-attr-d="M 0 {{-dataPt.y}} H {{dataPt.x}}"></path>
+
+          <path
+            ng-attr-d="M 0 0 L 0.1 0 A 0.1 0.1 0 {{dataPt.y<0 ? 1 : 0}} 0 {{dataPt.x*0.1}} {{-dataPt.y*0.1}}"
+            stroke-width="0.008"
+            ng-attr-fill="{{!getExact(dataPt.a) ? '#5bc0de' : '#5cb85c'}}">
+          </path>
+        </g>
+
+        <g ng-attr-fill="{{!getExact(dataPt.a) ? '#5bc0de' : '#5cb85c'}}" ng-attr-font-size="{{tx*1.5}}">
+          <circle ng-attr-cx="{{dataPt.x}}" ng-attr-cy="{{-dataPt.y}}" r="0.02"></circle>
+          <text
+            ng-attr-x="{{dataPt.x}}"
+            ng-attr-y="{{-dataPt.y + (dataPt.y>=0 ? -tx : 2*tx)}}"
+            ng-attr-text-anchor="{{dataPt.x>=0 ? 'start' : 'end'}}">
+            &alpha; = {{dataPt.a}}&deg;
+            {{getExact(dataPt.a) ? ' = ' + getExact(dataPt.a).a : ''}}
+          </text>
+
+          <g ng-attr-font-size="{{tx*1.2}}">
+            <text ng-attr-x="{{dataPt.x/2}}" ng-attr-y="{{tx*1.2 * (dataPt.y>=0 ? 2 : -1) }}" text-anchor="middle">
+              {{dataPt.x | number:3}}
+              {{getExact(dataPt.a) ? ' = ' + getExact(dataPt.a).x : ''}}
+            </text>
+            <text ng-attr-x="{{tx*1.2 * (dataPt.x>=0 ? -1 : 1) }}" ng-attr-y="{{-dataPt.y/2}}"
+              ng-attr-text-anchor="{{dataPt.x>=0 ? 'end' : 'start'}}">
+              {{dataPt.y | number:3}}
+              {{getExact(dataPt.a) ? ' = ' + getExact(dataPt.a).y : ''}}
+            </text>
+          </g>
+        </g>
+        <g>
+          <g ng-repeat="a in _.range(0, 360)">
+            <g ng-if="getExact(a)">
+              <circle ng-attr-cx="{{M.cos(a/180*M.PI)}}" ng-attr-cy="{{M.sin(a/180*M.PI)}}" r="0.02" fill="#ffffff"></circle>
+              <circle ng-attr-cx="{{M.cos(a/180*M.PI)}}" ng-attr-cy="{{M.sin(a/180*M.PI)}}" r="0.01" fill="#5cb85c"></circle>
+            </g>
+          </g>
+        </g>
+      </svg>
+
+
+      <div class="my-inline" ng-style="{'vertical-align': 'top'}">
+        <br><br>
+        <ul>
+          <li ng-repeat="pt in log" ng-style="{'margin-bottom': '4px'}" ng-mouseenter="loadPos(pt);">
+            <span class="label label-info large">&alpha; = {{ pt.a }}&deg;</span>
+            <span class="label label-info large">cos(&alpha;) = {{ pt.x | number:3 }}</span>
+            <span class="label label-info large">sin(&alpha;) = {{ pt.y | number:3 }}</span>
+
+            <span class="label label-success large" ng-if="getExact(pt.a)">&alpha; = {{ getExact(pt.a).a }}</span>
+            <span class="label label-success large" ng-if="getExact(pt.a)">cos(&alpha;) = {{getExact(pt.a).x}}</span>
+            <span class="label label-success large" ng-if="getExact(pt.a)">sin(&alpha;) = {{getExact(pt.a).y}}</span>
+          </li>
+        </ul>
+      </div>
+      
+    </div>
+
+
+    <script src="angular-sin.js"></script>
+  </body>
+</html>

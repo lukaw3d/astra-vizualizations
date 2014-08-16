@@ -2,8 +2,8 @@
 
 function Ctrl($scope) {
   $scope.w = 5;
-  $scope.tw = 0.075; //tick width
-  $scope.tx = 0.4; //text size
+  $scope.tw = 0.015*$scope.w; //tick width
+  $scope.tx = 0.08*$scope.w; //text size
   $scope._ = _;
   $scope.M = Math;
 
