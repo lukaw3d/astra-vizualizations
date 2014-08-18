@@ -53,4 +53,43 @@ function Ctrl($scope) {
 
     return 'label label-empty';
   };
+
+
+  var questionPrimes = _.difference(generatePrimes(400), $scope.primes);
+  var qustionPrimeDict = _.indexBy(questionPrimes);
+  function generateQuestionPrime() {
+    if (Math.random() < 0.75) {
+      var r = _.random(101, 400);
+      return r + (r%2 === 0);
+    } else {
+      return _.sample(questionPrimes, 1)[0];
+    }
+  }
+  $scope.questionPrime = generateQuestionPrime();
+  $scope.log = [];
+  $scope.logStats = {last: 0, acc: 0.5};
+  $scope.doLog = function (ans) {
+    $scope.log.unshift({
+      num: $scope.questionPrime,
+      ans: ans,
+      truth: !!qustionPrimeDict[$scope.questionPrime]
+    });
+    $scope.questionPrime = generateQuestionPrime();
+
+    var statLog = _.head($scope.log, 20);
+    $scope.logStats = {
+      last: statLog.length,
+      lastAcc: _.reduce(statLog, function (correct, l) {
+        return correct + (l.ans == l.truth);
+      }, 0) / statLog.length,
+      allAcc: _.reduce($scope.log, function (correct, l) {
+        return correct + (l.ans == l.truth);
+      }, 0) / $scope.log.length
+    };
+  };
+  $scope.questionClass = function (l, t) {
+    if (l.ans != t) return 'btn-default';
+    if (l.ans == l.truth) return 'btn-primary';
+    if (l.ans != l.truth) return 'btn-danger';
+  };
 }

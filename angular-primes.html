@@ -156,6 +156,28 @@
           <br><br>
         </div>
       </div>
+      <br>
+
+      <div>
+        <h4>
+          Ugani ali je praštevilo
+          <small ng-if="log.length>0">Pravilnih {{ logStats.lastAcc*100 | number:0 }}% zadnjih {{ logStats.last }} odgovorov</small>
+          <small ng-if="log.length>logStats.last">({{ logStats.allAcc*100 | number:0 }}% {{ log.length }})</small>
+        </h4>
+        <button class="btn btn-default btn-xs" ng-click="doLog(true);">Praštevilo</button>
+          {{ questionPrime }}
+        <button class="btn btn-default btn-xs" ng-click="doLog(false);">Sestavljeno število</button>
+        <br>
+
+        <ul class="list-unstyled">
+          <li ng-repeat="l in log">
+            <button disabled class="btn btn-xs" ng-class="questionClass(l, true)">Praštevilo</button>
+            {{ l.num }}
+            <button disabled class="btn btn-xs" ng-class="questionClass(l, false)">Sestavljeno število</button>
+          </li>
+        </ul>
+
+      </div>
 
     </div>
 
