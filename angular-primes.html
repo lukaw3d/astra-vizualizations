@@ -1,0 +1,36 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <title>Praštevila</title>
+    <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <link href="angular-astra.css" rel="stylesheet">
+  </head>
+  <body ng-controller="Ctrl">
+
+
+    <br>
+    <div class="container">
+      <form name="form">
+        <h4>Praštevila do 100</h4>
+
+        <table class="primes text-right">
+            <tr ng-repeat="row in _.range(0, 10)">
+                <td ng-repeat="col in _.range(1, 11)">
+                    <span ng-class="{'label label-primary': primeDict[row*10 + col]}">
+                        {{row*10 + col}}
+                    </span>
+                </td>
+            </tr>
+        </table>
+      </form>
+
+
+    </div>
+
+
+    <script src="angular-primes.js"></script>
+  </body>
+</html>
