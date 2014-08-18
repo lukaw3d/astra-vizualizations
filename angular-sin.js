@@ -14,8 +14,8 @@ function Ctrl($scope) {
 
   $scope.dataPt = transformPt({x: 1, y: 0});
   $scope.position = function (ev) {
-    pt.x = ev.x;
-    pt.y = ev.y;
+    pt.x = ev.pageX;
+    pt.y = ev.pageY;
     $scope.dataPt = pt.matrixTransform(svg.getScreenCTM().inverse());
     $scope.dataPt.y *= -1;
     $scope.dataPt = transformPt($scope.dataPt);

@@ -13,8 +13,8 @@ function Ctrl($scope) {
 
   $scope.dataPt = {x: 1, y: 1};
   $scope.position = function (ev) {
-    pt.x = ev.x;
-    pt.y = ev.y;
+    pt.x = ev.pageX;
+    pt.y = ev.pageY;
     $scope.dataPt = pt.matrixTransform(svg.getScreenCTM().inverse());
     $scope.dataPt.y *= -1;
 
