@@ -13,23 +13,151 @@
 
     <br>
     <div class="container">
-      <form name="form">
+      <div>
         <h4>Praštevila do 100</h4>
+        <br>
 
-        <table class="primes text-right">
-            <tr ng-repeat="row in _.range(0, 10)">
-                <td ng-repeat="col in _.range(1, 11)">
-                    <span ng-class="{'label label-primary': primeDict[row*10 + col]}">
-                        {{row*10 + col}}
-                    </span>
-                </td>
-            </tr>
+        <table class="primes text-center">
+          <tr ng-repeat="row in _.range(0, 10)">
+            <td ng-repeat="col in _.range(1, 11)">
+              <span ng-class="{'label label-primary': primeDict[row*10 + col]}">
+                {{row*10 + col}}
+              </span>
+            </td>
+          </tr>
         </table>
-      </form>
+        <br><br>
 
+        <ul class="list-inline tight">
+          <li ng-repeat="p in primes">
+            <span class="label label-primary">{{p}}</span>
+          </li>
+        </ul>
+      </div>
+      <br>
+
+      <div class="nowrap">
+        <h4>Postopek izdelave tabele (Eratostenovo sito) <small>&nbsp; &nbsp; Prikaži <input type="checkbox" ng-model="showProcess"></input></small></h4>
+
+        <div ng-if="showProcess">
+          <div>
+            <h5 class="text-warning">1.</h5>
+            <div class="indent">
+              &radic;100 = <span class="text-warning">10</span>
+              <br>
+              zato koraki 2 .. <span class="text-warning">10</span>
+              <br>
+              <br>
+              
+              <table class="tight text-center my-inline">
+                <tr ng-repeat="row in _.range(0, 10)">
+                  <td ng-repeat="col in _.range(1, 11)">
+                    <span ng-class="numClassPrev(row*10 + col, 2)">
+                      {{row*10 + col}}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+
+          <div ng-repeat="v in _.range(2, 11)">
+            <h5 class="text-warning">{{v}}.</h5>
+            <div class="indent">
+              <table class="tight text-center my-inline">
+                <tr ng-repeat="row in _.range(0, 10)">
+                  <td ng-repeat="col in _.range(1, 11)">
+                    <span ng-class="numClassPrev(row*10 + col, v)">
+                      {{row*10 + col}}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+
+              <table class="tight text-center my-inline">
+                <tr ng-repeat="row in _.range(0, 10)">
+                  <td ng-class="{invisible: row != 5}"> + </td>
+                </tr>
+              </table>
+
+              <table class="tight text-center my-inline well well-sm" ng-style="{'margin-bottom': '-10px'}">
+                <tr ng-repeat="row in _.range(0, 10)">
+                  <td ng-repeat="col in _.range(1, 11)">
+                    <span ng-class="numClassSingle(row*10 + col, v)">
+                      {{row*10 + col}}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+
+              <table class="tight text-center my-inline">
+                <tr ng-repeat="row in _.range(0, 10)">
+                  <td ng-class="{invisible: row != 5}"> = </td>
+                </tr>
+              </table>
+
+              <table class="tight text-center my-inline">
+                <tr ng-repeat="row in _.range(0, 10)">
+                  <td ng-repeat="col in _.range(1, 11)">
+                    <span ng-class="numClassAll(row*10 + col, v)">
+                      {{row*10 + col}}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <br>
+          <div class="indent">
+            <table class="tight text-center my-inline">
+              <tr ng-repeat="row in _.range(0, 10)">
+                <td ng-repeat="col in _.range(1, 11)">
+                  <span ng-class="numClassPrev(row*10 + col, 10)">
+                    {{row*10 + col}}
+                  </span>
+                </td>
+              </tr>
+            </table>
+
+            <table class="tight text-center my-inline">
+              <tr ng-repeat="row in _.range(0, 10)">
+                <td ng-class="{invisible: row != 5}"> = </td>
+              </tr>
+            </table>
+
+            <table class="tight text-center my-inline well well-sm" ng-style="{'margin-bottom': '-10px'}">
+              <tr ng-repeat="row in _.range(0, 10)">
+                <td ng-repeat="col in _.range(1, 11)">
+                  <span class="label" ng-class="primeDict[row*10 + col] ? 'label-empty' : 'label-default'">
+                    {{row*10 + col}}
+                  </span>
+                </td>
+              </tr>
+            </table>
+
+            <table class="tight text-center my-inline">
+              <tr ng-repeat="row in _.range(0, 10)">
+                <td ng-class="{invisible: row != 5}"> = </td>
+              </tr>
+            </table>
+
+            <table class="tight text-center my-inline">
+              <tr ng-repeat="row in _.range(0, 10)">
+                <td ng-repeat="col in _.range(1, 11)">
+                  <span class="label" ng-class="primeDict[row*10 + col] ? 'label-primary' : 'label-empty'">
+                    {{row*10 + col}}
+                  </span>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <br><br>
+        </div>
+      </div>
 
     </div>
-
 
     <script src="angular-primes.js"></script>
   </body>
