@@ -1,0 +1,68 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <title>Penney's game</title>
+    <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <link href="angular-astra.css" rel="stylesheet">
+  </head>
+  <body ng-controller="Ctrl">
+
+
+    <br>
+    <div class="container">
+      <h4>Penney's game</h4>
+      <div>
+        <span class="label label-warning">Player1</span>
+        <span ng-repeat="b in player1 track by $index">
+          <input type="checkbox" ng-model="b.v"></input>
+        </span>
+      </div>
+      <div>
+        <span class="label label-info">Player2</span>
+        <span ng-repeat="b in player2 track by $index">
+          <input type="checkbox" ng-model="b.v"></input>
+        </span>
+      </div>
+      <br>
+
+      <input type="number" ng-model="numGen">
+      <button ng-click="regenerate()">Start</button>
+      <hr>
+
+      Statistics:
+      <dl class="dl-horizontal">
+        <dt>Plays</dt>
+        <dd>{{stats.rows}}</dd>
+
+        <dt><span class="label label-warning">Player1 wins</span></dt>
+        <dd>{{stats.p1}} ({{stats.p1*100/stats.rows | number:1}}%)</dd>
+
+        <dt><span class="label label-info">Player2 wins</span></dt>
+        <dd>{{stats.p2}} ({{stats.p2*100/stats.rows | number:1}}%)</dd>
+
+        <dt>Dices</dt>
+        <dd>{{stats.dices}}</dd>
+
+        <dt>Diced 1s</dt>
+        <dd>{{stats.diceOnes}} ({{stats.diceOnes*100/stats.dices | number:1}}%)</dd>
+      </dl>
+      <hr>
+
+
+      <div ng-repeat="row in generated track by $index">
+        <span class="label label-warning" ng-show="row.p1">Player1</span>
+        <span class="label label-info" ng-show="row.p2">Player2</span>
+        <span ng-repeat="s in row.seq track by $index">
+          <input type="checkbox" ng-model="s"></input>
+        </span>
+      </div>
+
+      
+    </div>
+
+    <script src="angular-penneys-game.js"></script>
+  </body>
+</html>
