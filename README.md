@@ -5,8 +5,9 @@ Simple math vizualizations for http://astra.si/
 
 Always updated previews:
 
-* https://rawgit.com/lukaw3d/Astra-vizualizations/master/angular-prime-factors.html
-* https://rawgit.com/lukaw3d/Astra-vizualizations/master/angular-gcd.html
-* https://rawgit.com/lukaw3d/Astra-vizualizations/master/angular-im.html
-* https://rawgit.com/lukaw3d/Astra-vizualizations/master/angular-sin.html
-* https://rawgit.com/lukaw3d/Astra-vizualizations/master/angular-primes.html
+* http://lukaw3d.github.io/astra-vizualizations/angular-prime-factors.html
+* http://lukaw3d.github.io/astra-vizualizations/angular-gcd.html
+* http://lukaw3d.github.io/astra-vizualizations/angular-im.html
+* http://lukaw3d.github.io/astra-vizualizations/angular-sin.html
+* http://lukaw3d.github.io/astra-vizualizations/angular-primes.html
+* http://lukaw3d.github.io/astra-vizualizations/angular-angle.html
