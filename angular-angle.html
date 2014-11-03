@@ -16,7 +16,7 @@
 
       <h2>Merjenje kotov</h2>
 
-      <svg viewBox="-1.85 -1.2 3.85 2.4" height="325" width="500" id="imSvg" ng-mousemove="move($event)" ng-mouseup="rotating = false; positioning = false;" unselectable="on" class="unselectable" ng-style="{border: '1px solid #eee'}">
+      <svg viewBox="-1.85 -1.2 3.85 3.85" width="500" height="500" id="imSvg" ng-mousemove="move($event)" ng-mouseup="rotating = false; positioning = false;" unselectable="on" class="unselectable" ng-style="{border: '1px solid #eee'}">
 
         <g stroke="#000" fill="none" stroke-width="0.003" ng-attr-transform="translate({{lastPos.x}} {{-lastPos.y}}) rotate({{180-lastAngle}})">
           <path ng-attr-d="M {{-w*1.4}} 0 H {{w*1.4}}"></path>
@@ -44,13 +44,11 @@
             </g>
           </g>
 
-          <g ng-attr-transform="rotate({{ -(180-lastAngle) }})">
-            <circle cx="0" cy="0" ng-attr-r="{{dw*0.05}}" ng-style="{cursor: 'pointer'}" fill="#5bc0de" id="dot"
-              ng-mousedown="positioning = true"></circle>
+          <g ng-attr-transform="rotate({{ -(180-lastAngle) }})" ng-style="{cursor: 'pointer'}" ng-mousedown="positioning = true" fill="#5bc0de">
+            <circle cx="0" cy="0" ng-attr-r="{{dw*0.05}}" id="dot" stroke="transparent" ng-attr-stroke-width="{{dw*0.2}}"></circle>
           </g>
-          <g ng-attr-transform="translate({{-w}} 0) rotate({{ -(180-lastAngle) }})">
-            <circle cx="0" cy="0" ng-attr-r="{{dw*0.05}}" ng-style="{cursor: 'pointer'}" fill="#5bc0de"
-              ng-mousedown="rotating = true"></circle>
+          <g ng-attr-transform="translate({{-w}} 0) rotate({{ -(180-lastAngle) }})" ng-style="{cursor: 'pointer'}" ng-mousedown="rotating = true" fill="#5bc0de">
+            <circle cx="0" cy="0" ng-attr-r="{{dw*0.05}}" stroke="transparent" ng-attr-stroke-width="{{dw*0.2}}"></circle>
           </g>
           <g ng-attr-transform="rotate({{ -(180-lastAngle) }}) translate({{-lastPos.x}} {{lastPos.y}})" id="normalizedDot">
           </g>
@@ -66,18 +64,21 @@
       </svg>
       <div class="my-inline" ng-style="{'vertical-align': 'top'}">
         <form>
-          <div ng-class="anglePos.input == anglePos.a ? 'has-success' : 'has-error'">
-            <p>
-              <input type="number" step="5" class="form-control" ng-model="anglePos.input">
-            </p>
-            <button class="btn btn-info" ng-disabled="anglePos.input != anglePos.a" ng-click="logPos()">Naslednji</button>
+          <div ng-class="correct(anglePos) ? 'has-success' : 'has-error'">
+            <p><input type="number" step="5" min="0" max="180" class="form-control" ng-model="anglePos.input"></p>
+            <button class="btn btn-info" ng-disabled="!correct(anglePos)" ng-click="savePos()">Naslednji</button>
+            <button class="btn btn-default" ng-click="savePos()">Preskoči</button>
           </div>
         </form>
         <br>
 
         <ul>
-          <li ng-repeat="pt in log" ng-style="{'margin-bottom': '4px'}" ng-mouseenter="loadPos(pt);">
-            <span class="label label-info large">&alpha; = {{ pt.anglePos.a }}&deg;</span>
+          <li ng-repeat="pt in log" ng-style="{'margin-bottom': '4px'}">
+            <button class="btn" ng-class="correct(pt.anglePos) ? 'btn-info' : 'btn-danger'" ng-click="loadPos(pt, $index);">
+              &alpha;
+              <span ng-hide="correct(pt.anglePos)">&ne;</span><span ng-show="correct(pt.anglePos)">=</span>
+              {{ pt.anglePos.input }}&deg;
+            </button>
           </li>
         </ul>
       </div>

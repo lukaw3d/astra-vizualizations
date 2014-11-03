@@ -15,7 +15,7 @@ function Ctrl($scope) {
   var roundAngleM = 1;
 
   $scope.lastAngle = transformPt({x: -1, y: 0}).a;
-  $scope.lastPos = {x: 0, y: -1};
+  $scope.lastPos = {x: 0, y: -2};
   $scope.rotating = false;
   $scope.positioning = false;
   function evToDataPt(svgPivot, ev) {
@@ -54,25 +54,42 @@ function Ctrl($scope) {
 
   $scope.regenAngle = function () {
     $scope.anglePos = {
-      x: _.random(-$scope.w/2, $scope.w/2, true),
-      y: _.random(-$scope.w/2, $scope.w/2, true),
-      a: Math.floor(_.random(0, 180)/5)*5,
+      x: _.random(-$scope.w/4, $scope.w/4, true),
+      y: _.random(-$scope.w/6, $scope.w/4, true),
+      a: Math.floor(_.random(5, 180)/5)*5,
       pivotA: _.random(0, 360),
       input: 0
     };
   };
+  $scope.correct = function (obj) {
+    return obj.input == obj.a;
+  };
   $scope.regenAngle();
 
   $scope.log = [];
-  $scope.logPos = function () {
+  $scope.savePos = function (dontLoad) {
+    var prevLoaded = $scope.anglePos.saved;
+
+    $scope.anglePos.saved = true;
     $scope.log.push({
       anglePos: $scope.anglePos,
       lastPos: $scope.lastPos,
       lastAngle: $scope.lastAngle
     });
-    $scope.regenAngle();
+
+    if (prevLoaded && $scope.correct($scope.anglePos) && !dontLoad) {
+      var ix = _.findIndex($scope.log, function (item) {
+        return !$scope.correct(item.anglePos);
+      });
+      if (ix >= 0) $scope.loadPos($scope.log[ix], ix, true);
+      else $scope.regenAngle();
+    } else {
+      $scope.regenAngle();
+    }
   };
-  $scope.loadPos = function (pos) {
+  $scope.loadPos = function (pos, ix, dontLog) {
+    $scope.log.splice(ix, 1);
+    if (!dontLog) $scope.savePos(true);
     $scope.anglePos = pos.anglePos;
     $scope.lastPos = pos.lastPos;
     $scope.lastAngle = pos.lastAngle;
