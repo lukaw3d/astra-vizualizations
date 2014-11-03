@@ -1,0 +1,89 @@
+<!doctype html>
+<html ng-app>
+  <head>
+    <title>Merjenje kotov</title>
+    <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+    <link href="angular-astra.css" rel="stylesheet">
+  </head>
+  <body ng-controller="Ctrl">
+
+
+    <br>
+    <div class="container">
+
+      <h2>Merjenje kotov</h2>
+
+      <svg viewBox="-1.85 -1.2 3.85 2.4" height="325" width="500" id="imSvg" ng-mousemove="move($event)" ng-mouseup="rotating = false; positioning = false;" unselectable="on" class="unselectable" ng-style="{border: '1px solid #eee'}">
+
+        <g stroke="#000" fill="none" stroke-width="0.003" ng-attr-transform="translate({{lastPos.x}} {{-lastPos.y}}) rotate({{180-lastAngle}})">
+          <path ng-attr-d="M {{-w*1.4}} 0 H {{w*1.4}}"></path>
+
+          <path ng-attr-d="M {{-w*1.4}} 0 L 0 {{-w*1.2}}"></path>
+          <path ng-attr-d="M {{w*1.4}} 0 L 0 {{-w*1.2}}"></path>
+
+          <path ng-attr-d="M 0 {{-dw*0.6}} V 0" ng-attr-stroke-dasharray="{{dw*0.1}}, {{dw*0.05}}"></path>
+          <path ng-attr-d="M 0 {{-dw*0.6}} V 0" transform="rotate( 45)" ng-attr-stroke-dasharray="{{dw*0.1}}, {{dw*0.05}}"></path>
+          <path ng-attr-d="M 0 {{-dw*0.6}} V 0" transform="rotate(-45)" ng-attr-stroke-dasharray="{{dw*0.1}}, {{dw*0.05}}"></path>
+
+          <path ng-attr-d="M {{dw*0.6}} 0 A {{dw*0.6}} {{dw*0.6}} 0 0 0 {{-dw*0.6}} 0"></path>
+
+          <g stroke-width="0.003" ng-repeat="a in _.range(0, 180+1, 1)">
+            <path ng-attr-d="M {{M.cos(a/180*M.PI)}} {{-M.sin(a/180*M.PI)}} L {{M.cos(a/180*M.PI)*0.95}} {{-M.sin(a/180*M.PI)*0.95}}"></path>
+          </g>
+          <g stroke-width="0.004" ng-repeat="a in _.range(5, 180+1, 10)">
+            <path ng-attr-d="M {{M.cos(a/180*M.PI)}} {{-M.sin(a/180*M.PI)}} L {{M.cos(a/180*M.PI)*0.93}} {{-M.sin(a/180*M.PI)*0.93}}"></path>
+          </g>
+          <g stroke-width="0.007" ng-repeat="a in _.range(0, 180+1, 10)">
+            <path ng-attr-d="M {{M.cos(a/180*M.PI)}} {{-M.sin(a/180*M.PI)}} L {{M.cos(a/180*M.PI)*0.90}} {{-M.sin(a/180*M.PI)*0.90}}"></path>
+
+            <g ng-hide="$first || $last" stroke="none" fill="#000" ng-attr-font-size="{{tx}}" ng-attr-transform="rotate({{-a+2}}) translate({{dw*0.8}} 0)">
+              <text text-anchor="middle" x="0" y="0">{{a}}</text>
+            </g>
+          </g>
+
+          <g ng-attr-transform="rotate({{ -(180-lastAngle) }})">
+            <circle cx="0" cy="0" ng-attr-r="{{dw*0.05}}" ng-style="{cursor: 'pointer'}" fill="#5bc0de" id="dot"
+              ng-mousedown="positioning = true"></circle>
+          </g>
+          <g ng-attr-transform="translate({{-w}} 0) rotate({{ -(180-lastAngle) }})">
+            <circle cx="0" cy="0" ng-attr-r="{{dw*0.05}}" ng-style="{cursor: 'pointer'}" fill="#5bc0de"
+              ng-mousedown="rotating = true"></circle>
+          </g>
+          <g ng-attr-transform="rotate({{ -(180-lastAngle) }}) translate({{-lastPos.x}} {{lastPos.y}})" id="normalizedDot">
+          </g>
+        </g>
+
+        <g stroke="#5bc0de" stroke-width="0.01" fill="none">
+          <g ng-attr-transform="translate({{anglePos.x}} {{anglePos.y}}) rotate({{anglePos.pivotA}})">
+            <path ng-attr-d="M 0 0 H {{w}}"></path>
+            <path ng-attr-d="M 0 0 H {{w}}" ng-attr-transform="rotate({{anglePos.a}})"></path>
+          </g>
+        </g>
+
+      </svg>
+      <div class="my-inline" ng-style="{'vertical-align': 'top'}">
+        <form>
+          <div ng-class="anglePos.input == anglePos.a ? 'has-success' : 'has-error'">
+            <p>
+              <input type="number" step="5" class="form-control" ng-model="anglePos.input">
+            </p>
+            <button class="btn btn-info" ng-disabled="anglePos.input != anglePos.a" ng-click="logPos()">Naslednji</button>
+          </div>
+        </form>
+        <br>
+
+        <ul>
+          <li ng-repeat="pt in log" ng-style="{'margin-bottom': '4px'}" ng-mouseenter="loadPos(pt);">
+            <span class="label label-info large">&alpha; = {{ pt.anglePos.a }}&deg;</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+
+    <script src="angular-angle.js"></script>
+  </body>
+</html>
