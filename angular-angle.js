@@ -54,8 +54,8 @@ function Ctrl($scope) {
 
   $scope.regenAngle = function () {
     $scope.anglePos = {
-      x: _.random(-$scope.w/4, $scope.w/4, true),
-      y: _.random(-$scope.w/6, $scope.w/4, true),
+      x: _.random(-1.85+$scope.w*1.1, 3.85-1.85-$scope.w*1.1, true),
+      y: _.random(-1.2+$scope.w*1.1, 3.85-1.2-$scope.w*1.1, true),
       a: Math.floor(_.random(5, 180)/5)*5,
       pivotA: _.random(0, 360),
       input: 0
