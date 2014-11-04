@@ -57,7 +57,9 @@
         <g stroke="#5bc0de" stroke-width="0.01" fill="none">
           <g ng-attr-transform="translate({{anglePos.x}} {{anglePos.y}}) rotate({{anglePos.pivotA}})">
             <path ng-attr-d="M 0 0 H {{w}}"></path>
-            <path ng-attr-d="M 0 0 H {{w}}" ng-attr-transform="rotate({{anglePos.a}})"></path>
+            <path ng-attr-d="M 0 0 H {{w}}" ng-attr-transform="rotate({{-anglePos.a}})"></path>
+
+            <path ng-attr-d="M {{dw*0.6}} 0 A {{dw*0.6}} {{dw*0.6}} 0 0 0 {{M.cos(anglePos.a*M.PI/180)*dw*0.6}} {{-M.sin(anglePos.a*M.PI/180)*dw*0.6}}" stroke-width="0.02"></path>
           </g>
         </g>
 
