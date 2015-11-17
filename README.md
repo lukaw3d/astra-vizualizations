@@ -11,3 +11,7 @@ Always updated previews:
 * http://lukaw3d.github.io/astra-vizualizations/angular-sin.html
 * http://lukaw3d.github.io/astra-vizualizations/angular-primes.html
 * http://lukaw3d.github.io/astra-vizualizations/angular-angle.html
+
+### License
+
+MIT
